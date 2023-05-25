@@ -1,6 +1,8 @@
 # Compiled class file
 *.class
 
+
+.DS_Store
 # Log file
 *.log
 
@@ -9,7 +11,14 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-/.idea
+
+
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/libraries
+
 
 # Package Files #
 *.jar
