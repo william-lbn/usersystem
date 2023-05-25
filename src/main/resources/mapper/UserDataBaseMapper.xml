@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pml.cloud.dao.mapper.UserDataBaseMapper">
+
+    <resultMap id="BaseResultMap" type="com.pml.cloud.dao.po.UserDataBase">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="teamId" column="team_id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="serviceType" column="service_type" jdbcType="VARCHAR"/>
+        <result property="sid" column="sid" jdbcType="VARCHAR"/>
+        <result property="envName" column="env_name" jdbcType="VARCHAR"/>
+        <result property="mysqlUser" column="mysql_user" jdbcType="VARCHAR"/>
+        <result property="mysqlSecret" column="mysql_secret" jdbcType="VARCHAR"/>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="appEnName" column="app_enname" jdbcType="VARCHAR"/>
+        <result property="deleteFlag" column="delete_flag" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ApplicationAuthorizationResultMap" type="com.pml.cloud.dao.po.ApplicationAuthorization">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userDatabaseId" column="user_database_id" jdbcType="BIGINT"/>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="appEnName" column="app_enname" jdbcType="VARCHAR"/>
+        <result property="teamId" column="team_id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="ApplicationAuthorization_Column_List" >
+        id, user_database_id,app_name,app_enname, team_id, create_user, create_time,update_time
+    </sql>
+
+
+    <sql id="Base_Column_List" >
+        id, team_id, create_user,service_type,sid,env_name,mysql_user,mysql_secret,app_name,app_enname,delete_flag,create_time,update_time
+    </sql>
+
+    <insert id="insert" parameterType="UserDataBase">
+        insert into t_os_user_database
+        (id, team_id, create_user,service_type,sid,env_name,mysql_user,mysql_secret,app_name,app_enname,delete_flag,create_time,update_time)
+        values (#{id},#{teamId},#{createUser},#{serviceType},#{sid},#{envName},#{mysqlUser},#{mysqlSecret},
+        #{appName},#{appEnName},#{deleteFlag},#{createTime}, #{updateTime})
+
+    </insert>
+
+
+    <update id="update" parameterType="UserDataBase" >
+        UPDATE
+        t_os_user_database
+        SET
+            <if test="mysqlSecret != null">
+                mysql_secret = #{mysqlSecret}
+            </if>
+        WHERE
+        team_id = #{teamId} AND create_user = #{createUser} AND mysql_user = #{mysqlUser}
+    </update>
+
+
+    <select id="getUserDataBaseList" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM `t_os_user_database`
+        WHERE 1=1
+        ORDER BY id desc
+        <if test="page != null and size != null">
+            limit #{page}
+            , #{size}
+        </if>
+    </select>
+
+    <select id="getUserDataBaseListByTeamId" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM `t_os_user_database`
+        WHERE team_id = #{teamId}
+        ORDER BY id desc
+        <if test="page != null and size != null">
+            limit #{page}
+            , #{size}
+        </if>
+    </select>
+
+    <select id="getUserDataBaseListByTeamIdAndDeveloper" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM `t_os_user_database`
+        WHERE team_id = #{teamId} AND create_user = #{createUser}
+        ORDER BY id desc
+        <if test="page != null and size != null">
+            limit #{page}
+            , #{size}
+        </if>
+    </select>
+
+    <select id="getUserDataBaseCount" resultType="int">
+        select count(*)
+        from `t_os_user_database`
+    </select>
+
+    <select id="getUserDataBaseCountByTeamId" resultType="int">
+        select count(*)
+        from `t_os_user_database`
+        where team_id = #{teamId}
+    </select>
+
+    <select id="getUserDataBaseCountByTeamIdAndDeveloper" resultType="int">
+        select count(*)
+        from `t_os_user_database`
+        where team_id = #{teamId} and create_user = #{createUser}
+    </select>
+
+    <update id="updateApplicationAuthorization" parameterType="com.pml.cloud.dao.po.ApplicationAuthorization">
+        insert into t_os_user_database_app
+        (id, user_database_id, team_id, app_name,app_enname,create_user,create_time,update_time)
+        values (#{id},#{userDatabaseId}, #{teamId}, #{appName},#{appEnName},
+         #{createUser},#{createTime}, #{updateTime})
+    </update>
+
+
+    <select id="getApplicationAuthorizationListByUserDatabaseId" resultMap="ApplicationAuthorizationResultMap"  >
+        SELECT
+        <include refid="ApplicationAuthorization_Column_List" />
+        FROM `t_os_user_database_app`
+        WHERE user_database_id = #{userDatabaseId}
+        ORDER BY id desc
+        <if test="page != null and size != null">
+            limit #{page}
+            , #{size}
+        </if>
+    </select>
+
+    <select id="getApplicationAuthorizationCountByUserDatabaseId" resultType="int">
+        select count(*)
+        from `t_os_user_database_app`
+        where user_database_id = #{userDatabaseId}
+    </select>
+
+
+</mapper>

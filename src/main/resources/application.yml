@@ -1,0 +1,59 @@
+#docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=pml123456 -d mysql:latest
+#pml123456
+
+#docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=pml123456 -d mysql:5.7.41
+
+#nohup java -jar -Dfile.encoding=utf-8 -Dspring.config.location=classpath:/application-dev.yml test.jar >/dev/null 2>&1 &
+
+#java -jar -Dfile.encoding=utf-8 -Dspring.config.location=application.yml test.jar
+
+#docker run -d -p 8888:8888 --name usersystem usersystem:0.0.7
+
+server:
+  port: 8888
+
+
+spring:
+  # mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.27.248.195:3306/hyperos?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: pml123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+
+
+# 用户系统开户
+user:
+  system:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://43.142.85.224:3306
+    username: root
+    password: pml123456
+
+
+# mybatis-plus
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    use-generated-keys: true
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.pml.cloud.dao.po
+
+logging:
+  level:
+    com.pml.cloud.*: debug
+  file:
+    path: log
+
+
+
+
+

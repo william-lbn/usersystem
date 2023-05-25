@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pml.cloud.dao.mapper.AppInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.pml.cloud.dao.po.AppInfo">
+        <id property="AppId" column="app_id" jdbcType="BIGINT"/>
+        <result property="AppName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="AppEnName" column="app_enname" jdbcType="VARCHAR"/>
+        <result property="AppType" column="app_type" jdbcType="VARCHAR"/>
+        <result property="AppIcon" column="app_icon" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        app_id, app_name, app_enname,app_type,app_icon
+    </sql>
+
+    <select id="getAppInfoAll" parameterType="Long" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM `os_application` WHERE sys_id IN
+        (SELECT resource_id FROM os_team_resource WHERE team_id= #{teamId} AND resource_type='sys'
+        ) AND STATUS ='0';
+    </select>
+
+
+
+</mapper>
